@@ -14,36 +14,7 @@
 
 package httplib
 
-import (
-	"bytes"
-)
-
 var httpClient = DefaultHTTPClient()
-
-// RequestArgs 通用请求参数封装
-type RequestArgs struct {
-	// URL 请求地址 (必填)
-	URL string
-
-	// Headers HTTP请求头设置 (可选)
-	// nil表示不设置请求头
-	Headers map[string]string
-
-	// Params HTTP请求参数，键值对 (可选)
-	Params map[string]string
-
-	// Body HTTP请求体设置，必须是struct或[]byte类型 (可选)
-	// nil表示无请求体
-	Body interface{}
-
-	// JSONResult 接收JSON格式的响应内容, 必须是strcut类型 (可选)
-	// 如果该字段非空，将自动解析至JSONResult
-	JSONResult interface{}
-
-	// BytesResult 接收字节流响应内容 (可选)
-	// 如果该字段非空，响应体内容将被写入BytesResult
-	BytesResult *bytes.Buffer
-}
 
 // Head 发送Head请求
 func Head(args *RequestArgs) error {

@@ -16,6 +16,7 @@ package httplib
 
 import (
 	"bytes"
+	"errors"
 	"fmt"
 	"log"
 	"os"
@@ -48,6 +49,29 @@ func TestHTTPLib(t *testing.T) {
 	rp := bytes.NewBuffer(nil)
 	err := Get(&RequestArgs{
 		URL:         "http://www.google.cn",
+		BytesResult: rp,
+	})
+	if err != nil {
+		t.Fatal(err.Error())
+	}
+
+	t.Logf("Response Size: %dBytes\n", rp.Len())
+}
+
+func TestFilter(t *testing.T) {
+	SetDebug(newLogWriter())
+
+	filter0 := func(args *RequestArgs) error {
+		return nil
+	}
+	filter1 := func(args *RequestArgs) error {
+		return errors.New("rate limited")
+	}
+
+	rp := bytes.NewBuffer(nil)
+	err := Get(&RequestArgs{
+		URL:         "http://www.google.cn",
+		Filters:     []FilterFunc{filter0, filter1},
 		BytesResult: rp,
 	})
 	if err != nil {
